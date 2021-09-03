@@ -1,4 +1,7 @@
-const Card = (article) => {
+import axios from "axios";
+const Card = ({ headline, authorPhoto, authorName }) => {
+
+
   // TASK 5
   // ---------------------
   // Implement this function, which should return the markup you see below.
@@ -17,9 +20,53 @@ const Card = (article) => {
   //   </div>
   // </div>
   //
+  const container = document.createElement('div');
+  container.classList.add('card');
+
+  const headlineDiv = document.createElement('div');
+  headlineDiv.classList.add('headline');
+  headlineDiv.textContent = headline;
+  container.appendChild(headlineDiv);
+
+  const authorDiv = document.createElement('div');
+  authorDiv.classList.add('author');
+  container.appendChild(authorDiv);
+
+  const imgDiv = document.createElement('div');
+  imgDiv.classList.add('img-container');
+  authorDiv.appendChild(imgDiv);
+
+  const img = document.createElement('img');
+  img.src = authorPhoto;
+  imgDiv.appendChild(img);
+
+  const span = document.createElement('span');
+  span.textContent = `By ${authorName}`;
+  authorDiv.appendChild(span);
+
+  container.addEventListener('click', ()=>{
+    console.log(headline);
+  });
+  
+  return container;
 }
 
 const cardAppender = (selector) => {
+ 
+  axios.get(`http://localhost:5000/api/articles`)
+    .then(resp =>{
+      console.log(resp)
+      const container = document.querySelector(selector);
+      console.log(container);
+     for(const article in resp.data.articles){
+       console.log(resp.data.articles[article]);
+        const card = Card(resp.data.articles[article]);
+        container.appendChild(card);
+      }
+     })
+
+
+  //   })
   // TASK 6
   // ---------------------
   // Implement this function that takes a css selector as its only argument.
@@ -29,5 +76,5 @@ const cardAppender = (selector) => {
   // Append each card to the element in the DOM that matches the selector passed to the function.
   //
 }
-
+cardAppender()
 export { Card, cardAppender }
