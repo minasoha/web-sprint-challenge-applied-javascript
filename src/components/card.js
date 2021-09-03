@@ -57,11 +57,16 @@ const cardAppender = (selector) => {
     .then(resp =>{
       console.log(resp)
       const container = document.querySelector(selector);
-      console.log(container);
+      
+
      for(const article in resp.data.articles){
-       console.log(resp.data.articles[article]);
-        const card = Card(resp.data.articles[article]);
-        container.appendChild(card);
+       
+        const articles = resp.data.articles[article];
+        for(let i = 0; i < articles.length; i++){
+          const card = Card(articles[i]);
+          container.appendChild(card);
+        }
+        
       }
      })
 
@@ -76,5 +81,5 @@ const cardAppender = (selector) => {
   // Append each card to the element in the DOM that matches the selector passed to the function.
   //
 }
-cardAppender()
+
 export { Card, cardAppender }
